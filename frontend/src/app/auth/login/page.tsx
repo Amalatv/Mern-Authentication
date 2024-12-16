@@ -37,14 +37,22 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API_URL}/users/login`, formData, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        `${API_URL}/users/login`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }
+        }
+      );
 
       const user = response.data.data.user;
       
-      // Check if user is verified based on the isVerified field from database
-      if (user.isVerified === false) {
+      // Check if user is verified
+      if (!user.isVerified) {
         toast.error("Please verify your email before logging in");
         router.push(`/auth/verify?email=${encodeURIComponent(formData.email)}`);
         return;
@@ -53,12 +61,13 @@ const Login = () => {
       // User is verified, proceed with login
       dispatch(setAuthUser({
         ...user,
-        isverified: true 
+        isVerified: true
       }));
       
       toast.success("Login successful");
       router.push("/");
     } catch (error: any) {
+      console.error('Login Error:', error.response?.data || error.message);
       toast.error(error.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
