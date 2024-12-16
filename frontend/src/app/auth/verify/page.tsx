@@ -70,7 +70,10 @@ const Verify = () => {
       const otpValue = otp.join("");
       const response = await axios.post(
         `${API_URL}/users/verify`,
-        { otp: otpValue },
+        { 
+          email,
+          otp: otpValue
+        },
         { 
           withCredentials: true,
           headers: {
@@ -106,7 +109,7 @@ const Verify = () => {
     try {
       await axios.post(
         `${API_URL}/users/resend-otp`,
-        {},
+        { email },
         { 
           withCredentials: true,
           headers: {
