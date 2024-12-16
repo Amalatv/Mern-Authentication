@@ -70,16 +70,11 @@ const Verify = () => {
       const otpValue = otp.join("");
       const response = await axios.post(
         `${API_URL}/users/verify`,
-        { 
-          email,
-          otp: otpValue,
-          setVerified: true
-        },
+        { otp: otpValue },
         { 
           withCredentials: true,
           headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Content-Type': 'application/json'
           }
         }
       );
@@ -88,7 +83,7 @@ const Verify = () => {
       
       dispatch(setAuthUser({
         ...user,
-        isverified: true
+        isVerified: true
       }));
 
       toast.success("Email verification successful!");
@@ -111,8 +106,13 @@ const Verify = () => {
     try {
       await axios.post(
         `${API_URL}/users/resend-otp`,
-        { email },
-        { withCredentials: true }
+        {},
+        { 
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
       );
       toast.success("New OTP has been sent to your email");
     } catch (error: any) {
