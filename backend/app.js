@@ -15,12 +15,13 @@ app.use(cookieParser());
 
 
 // Middleware
-app.use(cors(
-    {
-        origin: [process.env.FRONTEND_URL || "https://luminotech.vercel.app/"],
-        credentials: true,
-    }
-));
+app.use(cors({
+    origin: ['https://luminotech.vercel.app', process.env.FRONTEND_URL || "http://localhost:3001"],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+    exposedHeaders: ['set-cookie']
+}));
 
 app.use(express.json());
 
