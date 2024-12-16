@@ -241,8 +241,6 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
 exports.resetPassword = catchAsync(async (req, res, next) => {
   const { email, otp, password, passwordConfirm } = req.body;
 
-  console.log({ email, otp, now: Date.now() });
-
   const user = await Users.findOne({
     email,
     resetPasswordOTP: otp,
@@ -250,7 +248,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   });
 
   if (!user) {
-    return next(new AppError("No user Found", 400));
+    return next(new AppError("Invalid OTP or OTP has expired", 400));
   }
 
   user.password = password;
