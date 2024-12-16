@@ -14,8 +14,8 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
 const router = express.Router();
 
 router.post("/signup", signup);
-router.post("/verify", isAuthenticated, verifyAccount);
-router.post("/resend-otp", isAuthenticated, resendOTP);
+router.post("/verify", verifyAccount);
+router.post("/resend-otp", resendOTP);
 router.post("/login", login);
 router.post("/logout", logout);
 router.post("/forget-password", forgetPassword);
