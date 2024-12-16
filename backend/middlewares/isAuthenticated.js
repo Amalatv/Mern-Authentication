@@ -4,11 +4,11 @@ const AppError = require("../utils/appError");
 const Users = require("../model/userModel");
 
 const isAuthenticated = catchAsync(async (req, res, next) => {
-  const token = req.cookies.token || req.headers.authorization?.split("")[1];
+  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
   if (!token) {
     return next(
-      new AppError("You are not logged in. Please login to access ", 401)
+      new AppError("You are not logged in. Please login to access", 401)
     );
   }
 
@@ -27,6 +27,5 @@ const isAuthenticated = catchAsync(async (req, res, next) => {
 
   
 });
-
 
 module.exports = isAuthenticated;
