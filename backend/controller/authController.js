@@ -83,20 +83,20 @@ exports.signup = catchAsync(async (req, res, next) => {
 //verify user//
 
 exports.verifyAccount = catchAsync(async (req, res, next) => {
-  const { otp } = req.body;
+  const { email, otp } = req.body;
 
-  if (!otp) {
-    return next(new AppError("Otp is missing", 400));
+  if (!email || !otp) {
+    return next(new AppError("Email and OTP are required", 400));
   }
 
-  const user = req.user;
+  const user = await Users.findOne({
+    email,
+    otp,
+    otpExpires: { $gt: Date.now() },
+  });
 
-  if (user.otp !== otp) {
-    return next(new AppError("Invalid OTP", 400));
-  }
-
-  if (Date.now() > user.otpExpires) {
-    return next(new AppError("Otp has expired. Please request a new OTP", 400));
+  if (!user) {
+    return next(new AppError("Invalid OTP or OTP has expired", 400));
   }
 
   user.isVerified = true;
@@ -109,7 +109,7 @@ exports.verifyAccount = catchAsync(async (req, res, next) => {
 });
 
 exports.resendOTP = catchAsync(async (req, res, next) => {
-  const { email } = req.user;
+  const { email } = req.body;
 
   if (!email) {
     return next(new AppError("Email is required to resend OTP", 400));
@@ -140,7 +140,7 @@ exports.resendOTP = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      message: "A new otp has sent to your email",
+      message: "A new otp has been sent to your email",
     });
   } catch (error) {
     user.otp = undefined;
@@ -148,7 +148,7 @@ exports.resendOTP = catchAsync(async (req, res, next) => {
     await user.save({ validateBeforeSave: false });
     return next(
       new AppError(
-        "There is an error in sending the email ! Please try again",
+        "There is an error in sending the email! Please try again",
         500
       )
     );
