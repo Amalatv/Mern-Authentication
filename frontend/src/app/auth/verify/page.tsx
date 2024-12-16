@@ -73,14 +73,19 @@ const Verify = () => {
         { 
           email,
           otp: otpValue,
-          setVerified: true // Explicitly tell backend to set isVerified
+          setVerified: true
         },
-        { withCredentials: true }
+        { 
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
       );
 
       const user = response.data.data.user;
       
-      // Ensure user is marked as verified in Redux
       dispatch(setAuthUser({
         ...user,
         isverified: true
@@ -89,6 +94,7 @@ const Verify = () => {
       toast.success("Email verification successful!");
       router.push("/");
     } catch (error: any) {
+      console.error('Verification Error:', error.response?.data || error.message);
       toast.error(error.response?.data?.message || "Verification failed");
     } finally {
       setLoading(false);
