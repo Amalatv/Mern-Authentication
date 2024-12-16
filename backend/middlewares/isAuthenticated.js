@@ -4,7 +4,12 @@ const AppError = require("../utils/appError");
 const Users = require("../model/userModel");
 
 const isAuthenticated = catchAsync(async (req, res, next) => {
-  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+  // Get token from cookie or Authorization header
+  let token = req.cookies.token;
+  
+  if (!token && req.headers.authorization?.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
 
   if (!token) {
     return next(
@@ -12,20 +17,26 @@ const isAuthenticated = catchAsync(async (req, res, next) => {
     );
   }
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  const currentUser = await Users.findById(decoded.id);
+    // Check if user still exists
+    const currentUser = await Users.findById(decoded.id);
+    if (!currentUser) {
+      return next(
+        new AppError("The user belonging to this token does not exist", 401)
+      );
+    }
 
-  if (!currentUser) {
+    // Grant access to protected route
+    req.user = currentUser;
+    next();
+  } catch (error) {
     return next(
-      new AppError("The user belonging to this token does not exist", 401)
+      new AppError("Invalid token or session expired. Please login again.", 401)
     );
   }
-
-  req.user = currentUser;
-  next();
-
-  
 });
 
 module.exports = isAuthenticated;
