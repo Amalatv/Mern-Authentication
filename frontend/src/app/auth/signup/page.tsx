@@ -10,6 +10,7 @@ import { FiLoader } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { setAuthUser } from "@/store/authSlice";
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -60,16 +61,21 @@ const Signup = () => {
     try {
       const response = await axios.post(`${API_URL}/users/signup`, formData, {
         withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
 
       const user = response.data.data.user;
-      toast.success("Please check your email for verification.");
       
-      // Don't set the user in Redux until they're verified
+      // Store the user in Redux state
+      dispatch(setAuthUser(user));
+      
+      toast.success("Please check your email for verification.");
       router.push(`/auth/verify?email=${encodeURIComponent(formData.email)}`);
     } catch (error: any) {
-      toast.error(error.response.data.message);
-      console.log(error);
+      toast.error(error.response?.data?.message || "Signup failed");
+      console.error(error);
     } finally {
       setLoading(false);
     }
