@@ -136,7 +136,6 @@ const Verify = () => {
               onKeyDown={(e) => handleKeyDown(index, e)}
               ref={(el) => {
                 inputRefs.current[index] = el;
-                return null;
               }}
               className="w-12 h-12 text-center text-2xl font-bold border rounded-lg focus:outline-none focus:border-blue-500 text-black"
             />
