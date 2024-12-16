@@ -1,80 +1,159 @@
-# Frontend Project
+# Luminotech Frontend
 
-A modern web application built with Next.js 14, featuring authentication, Redux state management, and a responsive UI using Tailwind CSS.
-
-## Tech Stack
-
-- **Framework:** Next.js 14 (React 18)
-- **State Management:** Redux Toolkit with Redux Persist
-- **Styling:** Tailwind CSS
-- **HTTP Client:** Axios
-- **UI Components:** React Icons, React Avatar
-- **Notifications:** React Toastify
-- **Type Safety:** TypeScript
+Modern, responsive frontend for Luminotech built with Next.js 13 and TypeScript.
 
 ## Features
 
-- Modern and responsive UI
-- Authentication system
-- State persistence
-- Toast notifications
-- Avatar support
-- Type-safe development
+- Modern Authentication System
+  - User registration with email verification
+  - Login with JWT
+  - Password reset functionality
+  - OTP verification system
+- Responsive Design
+  - Mobile-first approach
+  - Modern UI components
+  - Smooth animations
+- State Management
+  - Redux Toolkit for global state
+  - Persistent auth state
+- Form Handling
+  - Input validation
+  - Error handling
+  - Loading states
+
+## Tech Stack
+
+- Next.js 13 (App Router)
+- TypeScript
+- Redux Toolkit
+- Axios for API calls
+- TailwindCSS for styling
+- React Icons
+- React Toastify for notifications
 
 ## Project Structure
 
 ```
-src/
-├── app/          # Next.js app router pages
-├── components/   # Reusable UI components
-├── hoc/          # Higher-order components
-├── store/        # Redux store configuration
-└── types.data.ts # TypeScript type definitions
+frontend/
+├── src/
+│   ├── app/
+│   │   ├── auth/
+│   │   │   ├── login/
+│   │   │   ├── signup/
+│   │   │   ├── verify/
+│   │   │   ├── forgot-password/
+│   │   │   └── reset-password/
+│   │   └── page.tsx
+│   ├── components/
+│   │   └── Nav.tsx
+│   ├── store/
+│   │   ├── store.ts
+│   │   └── authSlice.ts
+│   ├── types/
+│   │   └── data.ts
+│   └── server.ts
+├── public/
+└── tailwind.config.js
 ```
 
-## Getting Started
+## Environment Variables
 
-1. **Clone the repository**
+Create a `.env.local` file with:
 
-2. **Install dependencies**
+```env
+NEXT_PUBLIC_BACKEND_URL=your_api_url
+```
+
+## Installation & Setup
+
+1. Clone the repository
+2. Install dependencies:
    ```bash
    npm install
    ```
-
-3. **Set up environment variables**
-   Create a `.env` file in the root directory with required variables.
-
-4. **Run the development server**
+3. Create `.env.local` with required variables
+4. Run the development server:
    ```bash
    npm run dev
    ```
-   Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-## Available Scripts
+## Features in Detail
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
+### Authentication Flow
+
+1. **Signup**
+   - Form validation
+   - Email verification process
+   - Success/error notifications
+
+2. **Email Verification**
+   - OTP input system
+   - Resend OTP functionality
+   - Auto-navigation
+
+3. **Login**
+   - Credential validation
+   - Persistent session
+   - Protected routes
+
+4. **Password Reset**
+   - Email verification
+   - OTP verification
+   - New password setup
+
+### State Management
+
+- Redux store configuration
+- Persistent auth state
+- Type-safe actions
+
+### UI Components
+
+- Responsive navigation
+- Form components
+- Loading states
+- Toast notifications
 
 ## Development
 
-The project uses Next.js 14 with the App Router. Key features include:
+1. Start the development server:
+   ```bash
+   npm run dev
+   ```
+2. Open [http://localhost:3000](http://localhost:3000)
+3. Make changes and see live updates
 
-- TypeScript for type safety
-- Tailwind CSS for styling
-- Redux Toolkit for state management
-- Redux Persist for state persistence
-- React Toastify for notifications
+## Building for Production
+
+1. Build the application:
+   ```bash
+   npm run build
+   ```
+2. Start the production server:
+   ```bash
+   npm start
+   ```
 
 ## Deployment
 
-The application can be deployed on Vercel or any other platform that supports Next.js applications.
+The frontend is configured for deployment on Vercel:
+- Automatic deployments
+- Environment variable management
+- Edge functions support
+- API routes optimization
 
-For Vercel deployment:
-1. Push your code to a Git repository
-2. Import the project to Vercel
-3. Configure environment variables
-4. Deploy
+## Best Practices
 
-For detailed deployment instructions, refer to the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying).
+- TypeScript for type safety
+- Component-based architecture
+- Responsive design patterns
+- Error boundary implementation
+- Performance optimization
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit changes
+4. Push to the branch
+5. Open a pull request
