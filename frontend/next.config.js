@@ -13,9 +13,13 @@ const nextConfig = {
   async rewrites() {
     return [
       {
+        source: '/api/:path*',
+        destination: 'https://luminotech-api.vercel.app/api/:path*',
+      },
+      {
         source: '/auth/:path*',
         destination: 'https://luminotech-api.vercel.app/auth/:path*',
-      },
+      }
     ]
   },
 }
