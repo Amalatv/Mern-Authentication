@@ -88,8 +88,8 @@ luminotech/
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/luminotech.git
-cd luminotech
+git clone https://github.com/Amalatv/Mern-Authentication.git
+cd Mern-Authentication
 ```
 
 2. Install Backend Dependencies
