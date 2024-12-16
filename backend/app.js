@@ -1,37 +1,45 @@
 // const dotenv = require('dotenv');
 require("dotenv").config();
 
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const cors = require('cors');
-const globalErrorHandler = require("./controller/errorController")
-const userRouter = require('./routes/userRouters');
-const AppError = require('./utils/appError');
+const userRouter = require("./routes/userRouters");
+const AppError = require("./utils/appError");
+const globalErrorHandler = require("./controller/errorController");
 
 const app = express();
 
-app.use(cookieParser());
-// dotenv.config);
-
-
-// Middleware
+// CORS configuration
 app.use(cors({
-    origin: ['https://luminotech.vercel.app', process.env.FRONTEND_URL || "http://localhost:3001"],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-    exposedHeaders: ['set-cookie']
+  origin: ['https://luminotech.vercel.app', 'http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+  exposedHeaders: ['Set-Cookie'],
+}));
+
+// Handle OPTIONS preflight
+app.options('*', cors({
+  origin: ['https://luminotech.vercel.app', 'http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+  exposedHeaders: ['Set-Cookie'],
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 
-//users api urls//
-app.use('/api/users', userRouter)
+// Routes
+app.use("/api/users", userRouter);
 
-app.all('*', (req, res, next) => {
-    next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
+// Handle undefined routes
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-app.use(globalErrorHandler)
+// Global error handler
+app.use(globalErrorHandler);
 
 module.exports = app;
